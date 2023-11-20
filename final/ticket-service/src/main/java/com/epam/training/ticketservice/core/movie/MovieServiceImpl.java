@@ -22,13 +22,37 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Optional<MovieDto> updateMovie(String title, String genre, Integer duration) {
-        return Optional.empty();
+        Optional<Movie> optionalMovie = movieRepository.findByTitle(title);
+
+        if (optionalMovie.isPresent()) {
+            Movie movie = optionalMovie.get();
+            movie.setGenre(genre);
+            movie.setDuration(duration);
+            movieRepository.save(movie);
+
+            MovieDto updatedMovieDto = new MovieDto(movie.getTitle(), movie.getGenre(), movie.getDuration());
+            return Optional.of(updatedMovieDto);
+        } else {
+            return Optional.empty();
+        }
     }
+
 
     @Override
     public Optional<MovieDto> deleteMovie(String title) {
-        return Optional.empty();
+        Optional<Movie> optionalMovie = movieRepository.findByTitle(title);
+
+        if (optionalMovie.isPresent()) {
+            Movie movie = optionalMovie.get();
+            movieRepository.delete(movie);
+
+            MovieDto deletedMovieDto = new MovieDto(movie.getTitle(), movie.getGenre(), movie.getDuration());
+            return Optional.of(deletedMovieDto);
+        } else {
+            return Optional.empty();
+        }
     }
+
     @Override
     public List<MovieDto> listMovies() {
         return movieRepository.findAll().stream()

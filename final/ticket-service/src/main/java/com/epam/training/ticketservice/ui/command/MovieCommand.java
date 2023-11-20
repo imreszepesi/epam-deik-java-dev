@@ -8,6 +8,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.util.List;
+import java.util.Optional;
 
 @ShellComponent
 @AllArgsConstructor
@@ -37,5 +38,21 @@ public class MovieCommand {
             }
             return result.toString();
         }
+    }
+    @ShellMethod(key = "update movie", value = "Update an existing movie")
+    public String updateMovie(String title, String genre, Integer duration) {
+        Optional<MovieDto> updatedMovie = movieService.updateMovie(title, genre, duration);
+        return updatedMovie.map(movie -> "Update movie was successful: " + formatMovie(movie))
+                .orElse("Update movie failed! Movie not found.");
+    }
+
+    @ShellMethod(key = "delete movie", value = "Delete an existing movie")
+    public String deleteMovie(String title) {
+        Optional<MovieDto> deletedMovie = movieService.deleteMovie(title);
+        return deletedMovie.map(movie -> "Delete movie was successful: " + formatMovie(movie))
+                .orElse("Delete movie failed! Movie not found.");
+    }
+    private String formatMovie(MovieDto movie) {
+        return String.format("%s (%s, %d minutes)", movie.getTitle(), movie.getGenre(), movie.getDuration());
     }
 }
