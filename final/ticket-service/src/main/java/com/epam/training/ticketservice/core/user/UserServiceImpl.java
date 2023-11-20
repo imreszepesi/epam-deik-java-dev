@@ -24,6 +24,18 @@ public class UserServiceImpl implements UserService {
         loggedInUser = new UserDto(user.get().getUsername(), user.get().getRole());
         return describe();
     }
+    @Override
+    public Optional<UserDto> adminLogin(String username, String password) {
+        Optional<User> user = userRepository.findByUsernameAndPassword(username, password);
+
+        if (user.isEmpty() || user.get().getRole() != User.Role.ADMIN) {
+            return Optional.empty();
+        }
+
+        loggedInUser = new UserDto(user.get().getUsername(), user.get().getRole());
+        return describe();
+    }
+
 
     @Override
     public Optional<UserDto> logout() {
