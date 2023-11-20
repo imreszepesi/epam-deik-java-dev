@@ -24,8 +24,18 @@ public class MovieCommand {
         }
     }
     @ShellMethod(key = "list movies", value = "Get movies")
-    public List<MovieDto> description(){
-        return movieService.listMovies();
+    public String listMovies() {
+        List<MovieDto> movies = movieService.listMovies();
 
+        if (movies.isEmpty()) {
+            return "There are no movies at the moment";
+        } else {
+            StringBuilder result = new StringBuilder();
+            for (MovieDto movie : movies) {
+                result.append(String.format("%s (%s, %d minutes)%n",
+                        movie.getTitle(), movie.getGenre(), movie.getDuration()));
+            }
+            return result.toString();
+        }
     }
 }
