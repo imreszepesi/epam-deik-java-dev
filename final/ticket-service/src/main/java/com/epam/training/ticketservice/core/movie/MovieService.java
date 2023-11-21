@@ -8,5 +8,5 @@ public interface MovieService {
     void createMovie(String title,String genre, Integer duration);
     Optional<MovieDto> updateMovie(String title,String genre, Integer duration);
     Optional<MovieDto> deleteMovie(String title);
-    List<MovieDto> listMovies(); // Change the return type here
+    List<MovieDto> listMovies();
 }

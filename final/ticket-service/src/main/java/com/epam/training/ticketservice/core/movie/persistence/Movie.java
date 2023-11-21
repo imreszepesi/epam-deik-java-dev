@@ -17,7 +17,7 @@ public class Movie {
     @Column(unique = true)
     private String title;
     private String genre;
-    public Integer duration;
+    private Integer duration;
 
 
     public Movie(String title, String genre, Integer duration) {
