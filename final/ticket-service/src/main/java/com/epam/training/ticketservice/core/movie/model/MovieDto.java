@@ -1,6 +1,6 @@
 package com.epam.training.ticketservice.core.movie.model;
 
-import lombok.Builder;
+
 import lombok.Value;
 
 @Value

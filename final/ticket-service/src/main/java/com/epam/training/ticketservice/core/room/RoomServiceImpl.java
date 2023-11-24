@@ -25,7 +25,7 @@ public class RoomServiceImpl implements  RoomService{
 
     @Override
     public Optional<RoomDto> updateRoom(String name, Integer numSeats, Integer numRows, Integer numColumns) {
-        Optional<Room> optionalRoom = roomRepository.findByTitle(name);
+        Optional<Room> optionalRoom = roomRepository.findByName(name);
         if(optionalRoom.isPresent()){
             Room room = optionalRoom.get();
             room.setNumColumns(numColumns);
@@ -41,7 +41,7 @@ public class RoomServiceImpl implements  RoomService{
 
     @Override
     public Optional<RoomDto> deleteRoom(String name) {
-        Optional<Room> optionalRoom = roomRepository.findByTitle(name);
+        Optional<Room> optionalRoom = roomRepository.findByName(name);
 
         if (optionalRoom.isPresent()) {
             Room room = optionalRoom.get();
