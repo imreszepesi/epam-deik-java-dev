@@ -15,9 +15,9 @@ public class RoomCommand {
     private final RoomService roomService;
 
     @ShellMethod(key = "create room", value = "Room Creation")
-    public String createRoom(String name, Integer numSeats, Integer numRows, Integer numColumns) {
+    public String createRoom(String name, Integer numRows, Integer numColumns) {
         try {
-            roomService.createRoom(name, numSeats, numRows, numColumns);
+            roomService.createRoom(name, numRows, numColumns);
             return "Create room was successful!";
         } catch (Exception e) {
             return "Create room failed!";
@@ -33,16 +33,16 @@ public class RoomCommand {
         } else {
             StringBuilder result = new StringBuilder();
             for (RoomDto room : rooms) {
-                result.append(String.format("%s with %d seats, %d rows, and %d columns%n",
-                        room.getName(), room.getNumSeats(), room.getNumRows(), room.getNumColumns()));
+                result.append(String.format("Room %s with %d seats, %d rows and %d columns",
+                        room.getName(), room.getNumRows()*room.getNumColumns(), room.getNumRows(), room.getNumColumns()));
             }
             return result.toString();
         }
     }
 
     @ShellMethod(key = "update room", value = "Update an existing room")
-    public String updateRoom(String name, Integer numSeats, Integer numRows, Integer numColumns) {
-        Optional<RoomDto> updatedRoom = roomService.updateRoom(name, numSeats, numRows, numColumns);
+    public String updateRoom(String name, Integer numRows, Integer numColumns) {
+        Optional<RoomDto> updatedRoom = roomService.updateRoom(name, numRows, numColumns);
         return updatedRoom.map(room -> "Update room was successful: " + formatRoom(room))
                 .orElse("Update room failed! Room not found.");
     }
@@ -55,7 +55,7 @@ public class RoomCommand {
     }
 
     private String formatRoom(RoomDto room) {
-        return String.format("%s with %d seats, %d rows, and %d columns",
-                room.getName(), room.getNumSeats(), room.getNumRows(), room.getNumColumns());
+        return String.format("%s with %d seats, %d rows and %d columns",
+                room.getName(), room.getNumRows()*room.getNumColumns(), room.getNumRows(), room.getNumColumns());
     }
 }

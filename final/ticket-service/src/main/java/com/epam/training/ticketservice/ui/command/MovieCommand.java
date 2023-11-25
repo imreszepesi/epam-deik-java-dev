@@ -33,7 +33,7 @@ public class MovieCommand {
         } else {
             StringBuilder result = new StringBuilder();
             for (MovieDto movie : movies) {
-                result.append(String.format("%s (%s, %d minutes)%n",
+                result.append(String.format("%s (%s, %d minutes)",
                         movie.getTitle(), movie.getGenre(), movie.getDuration()));
             }
             return result.toString();

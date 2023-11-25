@@ -11,7 +11,7 @@ public class UserCommand {
 
     private final UserService userService;
 
-    @ShellMethod(key = "user logout", value = "User logout")
+    @ShellMethod(key = "sign out", value = "User logout")
     public String logout() {
         return userService.logout()
                 .map(userDto -> userDto + " is logged out!")

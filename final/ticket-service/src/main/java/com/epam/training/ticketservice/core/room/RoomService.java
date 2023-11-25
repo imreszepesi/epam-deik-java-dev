@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomService {
-    void createRoom(String name,Integer numSeats,Integer numRows,Integer numColumns);
-    Optional<RoomDto> updateRoom(String name, Integer numSeats, Integer numRows, Integer numColumns);
+    void createRoom(String name,Integer numRows,Integer numColumns);
+    Optional<RoomDto> updateRoom(String name, Integer numRows, Integer numColumns);
 
     Optional<RoomDto> deleteRoom(String name);
 

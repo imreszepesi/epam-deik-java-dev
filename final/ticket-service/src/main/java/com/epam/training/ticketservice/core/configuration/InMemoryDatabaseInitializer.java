@@ -19,18 +19,14 @@ import javax.annotation.PostConstruct;
 public class InMemoryDatabaseInitializer {
 
     private final UserRepository userRepository;
-    private final MovieRepository movieRepository;
-    private final RoomRepository roomRepository;
+
     @PostConstruct
     public void init() {
         User admin = new User("admin", "admin", User.Role.ADMIN);
         userRepository.save(admin);
         User teszt = new User("teszt", "teszt", User.Role.USER);
         userRepository.save(teszt);
-        Movie movie = new Movie("Kiscsávó","Vígjáték", 220);
-        movieRepository.save(movie);
-        Room room = new Room("Szoba1",100,10,10);
-        roomRepository.save(room);
+
 
     }
 }

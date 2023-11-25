@@ -18,20 +18,19 @@ public class RoomServiceImpl implements  RoomService{
     private final RoomRepository roomRepository;
 
     @Override
-    public void createRoom(String name, Integer numSeats, Integer numRows, Integer numColumns) {
-        Room room = new Room(name,numSeats,numRows,numColumns);
+    public void createRoom(String name, Integer numRows, Integer numColumns) {
+        Room room = new Room(name,numRows,numColumns);
         roomRepository.save(room);
     }
 
     @Override
-    public Optional<RoomDto> updateRoom(String name, Integer numSeats, Integer numRows, Integer numColumns) {
+    public Optional<RoomDto> updateRoom(String name,Integer numRows, Integer numColumns) {
         Optional<Room> optionalRoom = roomRepository.findByName(name);
         if(optionalRoom.isPresent()){
             Room room = optionalRoom.get();
             room.setNumColumns(numColumns);
             room.setNumRows(numRows);
-            room.setNumSeats(numSeats);
-            RoomDto updateRoomDto = new RoomDto(room.getName(),room.getNumSeats(),room.getNumRows(),room.getNumColumns());
+            RoomDto updateRoomDto = new RoomDto(room.getName(),room.getNumRows(),room.getNumColumns());
             return Optional.of(updateRoomDto);
         }
         else{
@@ -47,7 +46,7 @@ public class RoomServiceImpl implements  RoomService{
             Room room = optionalRoom.get();
             roomRepository.delete(room);
 
-            RoomDto deletedRoomDto = new RoomDto(room.getName(), room.getNumSeats(), room.getNumRows(), room.getNumColumns());
+            RoomDto deletedRoomDto = new RoomDto(room.getName(), room.getNumRows(), room.getNumColumns());
             return Optional.of(deletedRoomDto);
         } else {
             return Optional.empty();
@@ -57,7 +56,7 @@ public class RoomServiceImpl implements  RoomService{
     @Override
     public List<RoomDto> listRooms() {
         return roomRepository.findAll().stream()
-                .map(room -> new RoomDto(room.getName(), room.getNumSeats(), room.getNumRows(), room.getNumColumns()))
+                .map(room -> new RoomDto(room.getName(), room.getNumRows(), room.getNumColumns()))
                 .collect(Collectors.toList());
     }
 }

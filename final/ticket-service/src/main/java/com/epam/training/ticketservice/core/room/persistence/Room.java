@@ -15,12 +15,10 @@ public class Room {
     private Integer id;
     @Column(unique = true)
     private String name;
-    private Integer numSeats;
     private Integer numRows;
     private Integer numColumns;
-    public Room(String name, Integer numSeats, Integer numRows, Integer numColumns) {
+    public Room(String name, Integer numRows, Integer numColumns) {
         this.name = name;
-        this.numSeats = numSeats;
         this.numRows = numRows;
         this.numColumns = numColumns;
     }
