@@ -18,11 +18,11 @@ public class ScreenServiceImpl implements ScreenService {
     @Override
     public String registerScreen(ScreenDto screenDto) {
         if (checkForOverlap(screenDto)) {
-            return "There is an overlapping screen";
+            return "There is an overlapping screening";
         }
 
         if (isBreakPeriod(screenDto)) {
-            return "This would start in the break period after another screen in this room";
+            return "This would start in the break period after another screening in this room";
         }
 
         Screen screen = createScreenFromDto(screenDto);
