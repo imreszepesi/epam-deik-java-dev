@@ -30,6 +30,7 @@ public class RoomServiceImpl implements  RoomService{
             Room room = optionalRoom.get();
             room.setNumColumns(numColumns);
             room.setNumRows(numRows);
+            roomRepository.save(room);
             RoomDto updateRoomDto = new RoomDto(room.getName(),room.getNumRows(),room.getNumColumns());
             return Optional.of(updateRoomDto);
         }
