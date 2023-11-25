@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class ScreenDto {
 
     private Room room;
-    private Movie movie;
+    private Movie title;
     private LocalDateTime screeningDate;
     private LocalDateTime screeningEndDate;
 

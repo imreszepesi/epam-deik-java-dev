@@ -4,16 +4,15 @@ import com.epam.training.ticketservice.core.screen.model.ScreenDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface ScreenService {
-    String createScreening(ScreenDto screeningDto);
+    String registerScreen(ScreenDto screeningDto);
 
-    boolean screenOverlapping(ScreenDto screeningDto);
+    boolean checkForOverlap(ScreenDto screeningDto);
 
-    List<ScreenDto> getScreeningList();
+    List<ScreenDto> listScreens();
 
-    void deleteScreening(String movieName, String roomName, LocalDateTime screeningDate);
+    void removeScreen(String movieName, String roomName, LocalDateTime screeningDate);
 }
 
 

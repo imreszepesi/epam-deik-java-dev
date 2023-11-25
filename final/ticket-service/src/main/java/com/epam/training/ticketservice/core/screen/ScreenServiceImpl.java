@@ -1,11 +1,4 @@
 package com.epam.training.ticketservice.core.screen;
-
-import com.epam.training.ticketservice.core.movie.MovieService;
-import com.epam.training.ticketservice.core.movie.model.MovieDto;
-import com.epam.training.ticketservice.core.movie.persistence.MovieRepository;
-import com.epam.training.ticketservice.core.room.RoomService;
-import com.epam.training.ticketservice.core.room.model.RoomDto;
-import com.epam.training.ticketservice.core.room.persistence.RoomRepository;
 import com.epam.training.ticketservice.core.screen.model.ScreenDto;
 import com.epam.training.ticketservice.core.screen.persistence.Screen;
 import com.epam.training.ticketservice.core.screen.persistence.ScreenRepository;
@@ -14,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,23 +16,29 @@ public class ScreenServiceImpl implements ScreenService {
     private final ScreenRepository screenRepository;
 
     @Override
-    public String createScreening(ScreenDto screenDto) {
-        Screen screen = new Screen();
-        if (screenOverlapping(screenDto)) {
+    public String registerScreen(ScreenDto screenDto) {
+        if (checkForOverlap(screenDto)) {
             return "There is an overlapping screen";
         }
-        if (breakPeriod(screenDto)){
+
+        if (isBreakPeriod(screenDto)) {
             return "This would start in the break period after another screen in this room";
         }
-        screen.setRoom(screenDto.getRoom());
-        screen.setMovie(screenDto.getMovie());
-        screen.setScreeningDate(screenDto.getScreeningDate());
-        screen.setScreeningEndDate(screenDto.getScreeningEndDate());
+
+        Screen screen = createScreenFromDto(screenDto);
         screenRepository.save(screen);
+
         return screen.toString();
     }
-
-    private boolean breakPeriod(ScreenDto screenDto) {
+    private Screen createScreenFromDto(ScreenDto screenDto) {
+        Screen screen = new Screen();
+        screen.setRoom(screenDto.getRoom());
+        screen.setTitle(screenDto.getTitle());
+        screen.setScreeningDate(screenDto.getScreeningDate());
+        screen.setScreeningEndDate(screenDto.getScreeningEndDate());
+        return screen;
+    }
+    private boolean isBreakPeriod(ScreenDto screenDto) {
         return screenRepository
                 .findByScreeningEndDateGreaterThanEqualAndScreeningEndDateLessThanEqualAndRoom_Name(
                         screenDto.getScreeningDate().minusSeconds(10*60),
@@ -50,7 +48,7 @@ public class ScreenServiceImpl implements ScreenService {
     }
 
     @Override
-    public boolean screenOverlapping(ScreenDto screenDto){
+    public boolean checkForOverlap(ScreenDto screenDto){
         return screenRepository
                 .findByScreeningDateGreaterThanEqualAndScreeningEndDateLessThanEqualAndRoom_Name(
                         screenDto.getScreeningDate(), screenDto.getScreeningEndDate(), screenDto.getRoom().getName())
@@ -70,24 +68,25 @@ public class ScreenServiceImpl implements ScreenService {
     }
 
     @Override
-    public List<ScreenDto> getScreeningList() {
+    public List<ScreenDto> listScreens() {
         return screenRepository.findAll()
                 .stream()
-                .map(this::entityToDto)
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteScreening(String movieName, String roomName, LocalDateTime screenDate) {
-        screenRepository.deleteByMovie_NameAndRoom_NameAndScreeningDate(movieName, roomName, screenDate);
+    public void removeScreen(String movieName, String roomName, LocalDateTime screenDate) {
+        screenRepository.deleteByTitleAndRoom_NameAndScreeningDate(movieName, roomName, screenDate);
     }
 
-    public ScreenDto entityToDto(Screen screen){
+    public ScreenDto convertToDto(Screen screen){
         return ScreenDto.builder()
-                .movie(screen.getMovie())
+                .title(screen.getTitle())
                 .room(screen.getRoom())
                 .screeningDate(screen.getScreeningDate())
                 .screeningEndDate(screen.getScreeningEndDate())
                 .build();
     }
+
 }

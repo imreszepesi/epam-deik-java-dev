@@ -27,7 +27,7 @@ public interface ScreenRepository extends JpaRepository<Screen, Long> {
     Optional<Screen> findByScreeningEndDateGreaterThanEqual(LocalDateTime screeningEndDate);
 
     @Transactional
-    void deleteByMovie_NameAndRoom_NameAndScreeningDate(String name, String name1, LocalDateTime screeningDate);
+    void deleteByTitleAndRoom_NameAndScreeningDate(String name, String name1, LocalDateTime screeningDate);
 }
 
 

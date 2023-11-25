@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
             return Optional.empty();
         }
-        loggedInUser = new UserDto(user.get().getUsername(), user.get().getRole());
+        loggedInUser = new UserDto(user.get().getUsername(), user.get().getPassword(), user.get().getRole());
         return describe();
     }
     @Override
@@ -32,7 +32,8 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
 
-        loggedInUser = new UserDto(user.get().getUsername(), user.get().getRole());
+        loggedInUser = new UserDto(user.get().getUsername(), user.get().getPassword(), user.get().getRole());
+
         return describe();
     }
 

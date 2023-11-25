@@ -20,7 +20,7 @@ public class Screen {
 
     @ManyToOne(cascade = CascadeType.MERGE)
 
-    private Movie movie;
+    private Movie title;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "room_name")
