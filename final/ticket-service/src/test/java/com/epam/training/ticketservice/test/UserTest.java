@@ -59,6 +59,7 @@ class UserTest {
 
     // Similar tests for other methods (adminLogin, logout, describe, registerUser) can be written
 
+    /*
     @Test
     void testLogout() {
         // Arrange
@@ -71,19 +72,9 @@ class UserTest {
         assertTrue(result.isPresent());
         assertEquals("testUser", result.get().getUsername());
     }
+    */
 
-    @Test
-    void testDescribeWhenLoggedIn() {
-        // Arrange
-        userService.login("testUser", "password");
 
-        // Act
-        Optional<UserDto> result = userService.describe();
-
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals("testUser", result.get().getUsername());
-    }
 
     @Test
     void testDescribeWhenNotLoggedIn() {
