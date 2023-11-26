@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.test;
+package com.epam.training.ticketservice;
 
 import com.epam.training.ticketservice.core.room.RoomServiceImpl;
 import com.epam.training.ticketservice.core.room.model.RoomDto;
