@@ -134,10 +134,26 @@
                                     </limits>
                                 </rule>
                             </rules>
+                            <excludes>
+                                <exclude>com/epam/training/ticketservice/Application.class</exclude>
+                                <exclude>com/epam/training/ticketservice/core/configuration/**</exclude>
+                                <exclude>com/epam/training/ticketservice/ui/configuration/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/movie/model/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/room/model/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/screen/model/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/user/model/**</exclude>
+                                <exclude>com/epam/training/ticketservice/ui/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/movie/persistence/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/room/persistence/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/screen/persistence/**</exclude>
+                                <exclude>com/epam/training/ticketservice/core/user/persistence/**</exclude>
+                            </excludes>
+
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>
