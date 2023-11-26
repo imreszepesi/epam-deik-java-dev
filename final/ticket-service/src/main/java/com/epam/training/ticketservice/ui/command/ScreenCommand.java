@@ -48,19 +48,31 @@ public class ScreenCommand {
     }
 
     @ShellMethod(key = "list screenings", value = "Shows all the existing screening")
-    public String listScreening(){
-        if (screenService.listScreens().isEmpty()){
+    public String listScreening() {
+        if (screenService.listScreens().isEmpty()) {
             return "There are no screenings";
         }
+
         return screenService.listScreens()
-                .stream().map(Objects::toString)
-                .collect(Collectors.joining(""));
+                .stream()
+                .map(screen -> String.format("%s (%s, %d minutes), screened in room %s, at %s",
+                        screen.getTitle().getTitle(),
+                        screen.getTitle().getGenre(),
+                        screen.getTitle().getDuration(),
+                        screen.getRoom().getName(),
+                        screen.getScreeningDate().format(format)))
+                .collect(Collectors.joining("\n"));
     }
 
     @ShellMethod(key = "delete screening", value = "delete specific screening")
-    public void deleteScreening(String movieName, String roomName, String screeningDate){
-        date = LocalDateTime.parse(screeningDate, format);
-        screenService.removeScreen(movieName, roomName, date);
+    public String deleteScreening(String movieName, String roomName, String screeningDate) {
+        try {
+            date = LocalDateTime.parse(screeningDate, format);
+            screenService.removeScreen(movieName, roomName, date);
+            return "Screening deleted successfully";
+        } catch (Exception e) {
+            return "Error deleting screening: " + e.getMessage();
+        }
     }
 
 

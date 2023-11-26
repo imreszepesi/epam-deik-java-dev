@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.core.screen.persistence;
 
+import com.epam.training.ticketservice.core.movie.persistence.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +28,8 @@ public interface ScreenRepository extends JpaRepository<Screen, Long> {
     Optional<Screen> findByScreeningEndDateGreaterThanEqual(LocalDateTime screeningEndDate);
 
     @Transactional
-    void deleteByTitleAndRoom_NameAndScreeningDate(String name, String name1, LocalDateTime screeningDate);
+    void deleteByTitleAndRoom_NameAndScreeningDate(Movie title, String name1, LocalDateTime screeningDate);
+
 }
 
 

@@ -1,4 +1,6 @@
 package com.epam.training.ticketservice.core.screen;
+import com.epam.training.ticketservice.core.movie.persistence.Movie;
+import com.epam.training.ticketservice.core.movie.persistence.MovieRepository;
 import com.epam.training.ticketservice.core.screen.model.ScreenDto;
 import com.epam.training.ticketservice.core.screen.persistence.Screen;
 import com.epam.training.ticketservice.core.screen.persistence.ScreenRepository;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 public class ScreenServiceImpl implements ScreenService {
 
     private final ScreenRepository screenRepository;
+    private final MovieRepository movieRepository;
 
     @Override
     public String registerScreen(ScreenDto screenDto) {
@@ -77,8 +80,13 @@ public class ScreenServiceImpl implements ScreenService {
 
     @Override
     public void removeScreen(String movieName, String roomName, LocalDateTime screenDate) {
-        screenRepository.deleteByTitleAndRoom_NameAndScreeningDate(movieName, roomName, screenDate);
+
+        Movie movie = movieRepository.findByTitle(movieName)
+                .orElseThrow(() -> new RuntimeException("Movie not found")); // Handle this exception appropriately
+
+        screenRepository.deleteByTitleAndRoom_NameAndScreeningDate(movie, roomName, screenDate);
     }
+
 
     public ScreenDto convertToDto(Screen screen){
         return ScreenDto.builder()
