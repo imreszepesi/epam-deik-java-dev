@@ -30,70 +30,131 @@ class UserTest {
     }
 
     @Test
-    void testLoginWithValidCredentials() {
+    void testLogin() {
         // Arrange
-        User user = new User("testUser", "password", User.Role.USER);
-        when(userRepository.findByUsernameAndPassword("testUser", "password")).thenReturn(Optional.of(user));
+        String username = "user";
+        String password = "password";
+        User user = new User(username, password, User.Role.USER);
+
+        when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(Optional.of(user));
 
         // Act
-        Optional<UserDto> result = userService.login("testUser", "password");
+        Optional<UserDto> loggedInUser = userService.login(username, password);
 
         // Assert
-        assertTrue(result.isPresent());
-        assertEquals("testUser", result.get().getUsername());
-        assertEquals("password", result.get().getPassword());
-        assertEquals(User.Role.USER, result.get().getRole());
+        assertTrue(loggedInUser.isPresent());
+        assertEquals(username, loggedInUser.get().getUsername());
+        assertEquals(password, loggedInUser.get().getPassword());
+        assertEquals(User.Role.USER, loggedInUser.get().getRole());
     }
 
     @Test
-    void testLoginWithInvalidCredentials() {
+    void testLoginInvalidCredentials() {
         // Arrange
-        when(userRepository.findByUsernameAndPassword("invalidUser", "invalidPassword")).thenReturn(Optional.empty());
+        String username = "nonexistent";
+        String password = "invalid";
+
+        when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(Optional.empty());
 
         // Act
-        Optional<UserDto> result = userService.login("invalidUser", "invalidPassword");
+        Optional<UserDto> loggedInUser = userService.login(username, password);
 
         // Assert
-        assertTrue(result.isEmpty());
+        assertTrue(loggedInUser.isEmpty());
     }
 
-    // Similar tests for other methods (adminLogin, logout, describe, registerUser) can be written
+    @Test
+    void testAdminLogin() {
+        // Arrange
+        String username = "admin";
+        String password = "admin";
+        User adminUser = new User(username, password, User.Role.ADMIN);
 
-    /*
+        when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(Optional.of(adminUser));
+
+        // Act
+        Optional<UserDto> loggedInAdmin = userService.adminLogin(username, password);
+
+        // Assert
+        assertTrue(loggedInAdmin.isPresent());
+        assertEquals(username, loggedInAdmin.get().getUsername());
+        assertEquals(password, loggedInAdmin.get().getPassword());
+        assertEquals(User.Role.ADMIN, loggedInAdmin.get().getRole());
+    }
+
+    @Test
+    void testAdminLoginInvalidCredentials() {
+        // Arrange
+        String username = "nonexistent";
+        String password = "invalid";
+
+        when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<UserDto> loggedInAdmin = userService.adminLogin(username, password);
+
+        // Assert
+        assertTrue(loggedInAdmin.isEmpty());
+    }
+
     @Test
     void testLogout() {
         // Arrange
-        userService.login("testUser", "password");
+        String username = "user";
+        String password = "password";
+        User user = new User(username, password, User.Role.USER);
+
+        when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(Optional.of(user));
+
+        // Login first
+        userService.login(username, password);
 
         // Act
-        Optional<UserDto> result = userService.logout();
+        Optional<UserDto> loggedOutUser = userService.logout();
 
         // Assert
-        assertTrue(result.isPresent());
-        assertEquals("testUser", result.get().getUsername());
+        assertTrue(loggedOutUser.isPresent());
+        assertEquals(username, loggedOutUser.get().getUsername());
+        assertEquals(password, loggedOutUser.get().getPassword());
+        assertEquals(User.Role.USER, loggedOutUser.get().getRole());
+
+        // Check that the user is actually logged out
+        Optional<UserDto> loggedInUser = userService.describe();
+        assertTrue(loggedInUser.isEmpty());
     }
-    */
-
-
 
     @Test
-    void testDescribeWhenNotLoggedIn() {
+    void testDescribe() {
+        // Arrange
+        String username = "user";
+        String password = "password";
+        User user = new User(username, password, User.Role.USER);
+
+        when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(Optional.of(user));
+
+        // Login first
+        userService.login(username, password);
+
         // Act
-        Optional<UserDto> result = userService.describe();
+        Optional<UserDto> loggedInUser = userService.describe();
 
         // Assert
-        assertTrue(result.isEmpty());
+        assertTrue(loggedInUser.isPresent());
+        assertEquals(username, loggedInUser.get().getUsername());
+        assertEquals(password, loggedInUser.get().getPassword());
+        assertEquals(User.Role.USER, loggedInUser.get().getRole());
     }
 
     @Test
     void testRegisterUser() {
         // Arrange
-        when(userRepository.save(any(User.class))).thenReturn(new User("newUser", "newPassword", User.Role.USER));
+        String username = "newUser";
+        String password = "newPassword";
 
         // Act
-        userService.registerUser("newUser", "newPassword");
+        userService.registerUser(username, password);
 
-        // Assert - You can add additional assertions based on your requirements
+        // Assert
         verify(userRepository, times(1)).save(any(User.class));
     }
 }
