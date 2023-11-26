@@ -21,9 +21,11 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
             return Optional.empty();
         }
+
         loggedInUser = new UserDto(user.get().getUsername(), user.get().getPassword(), user.get().getRole());
         return describe();
     }
+
     @Override
     public Optional<UserDto> adminLogin(String username, String password) {
         Optional<User> user = userRepository.findByUsernameAndPassword(username, password);
@@ -36,7 +38,6 @@ public class UserServiceImpl implements UserService {
 
         return describe();
     }
-
 
     @Override
     public Optional<UserDto> logout() {
@@ -56,4 +57,3 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 }
-

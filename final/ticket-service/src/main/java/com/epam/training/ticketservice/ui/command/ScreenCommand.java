@@ -10,7 +10,8 @@ import com.epam.training.ticketservice.core.user.persistence.User;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-
+import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,15 +19,10 @@ import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
-
-import java.text.ParseException;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-
-
 @ShellComponent
 @RequiredArgsConstructor
 public class ScreenCommand {
+
     private final ScreenService screenService;
     private final UserService userService;
     private final RoomRepository roomRepository;
@@ -34,15 +30,14 @@ public class ScreenCommand {
     private final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private LocalDateTime date;
 
-    //@ShellMethodAvailability("isAvailable")
-    @ShellMethod(key = "create screening", value = " creating a screening in a cinema room")
+    @ShellMethod(key = "create screening", value = "creating a screening in a cinema room")
     public String createScreening(String movieName, String roomName, String screeningTime) throws ParseException {
         date = LocalDateTime.parse(screeningTime, format);
         ScreenDto screeningDto = ScreenDto.builder()
                 .title(movieRepository.findByTitle(movieName).get())
                 .room(roomRepository.findByName(roomName).get())
                 .screeningDate(date)
-                .screeningEndDate(date.plusSeconds(movieRepository.findByTitle(movieName).get().getDuration()* 60L))
+                .screeningEndDate(date.plusSeconds(movieRepository.findByTitle(movieName).get().getDuration() * 60L))
                 .build();
         return screenService.registerScreen(screeningDto);
     }
@@ -75,11 +70,9 @@ public class ScreenCommand {
         }
     }
 
-
-
-    private Availability isAvailable(){
+    private Availability isAvailable() {
         Optional<UserDto> user = userService.describe();
-        return user.isPresent() &&  user.get().getRole() != User.Role.ADMIN
+        return user.isPresent() && user.get().getRole() != User.Role.ADMIN
                 ? Availability.available()
                 : Availability.unavailable("You are not an admin!");
     }

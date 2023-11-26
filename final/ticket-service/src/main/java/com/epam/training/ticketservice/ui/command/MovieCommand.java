@@ -1,6 +1,5 @@
 package com.epam.training.ticketservice.ui.command;
 
-
 import com.epam.training.ticketservice.core.movie.MovieService;
 import com.epam.training.ticketservice.core.movie.model.MovieDto;
 import lombok.AllArgsConstructor;
@@ -13,17 +12,19 @@ import java.util.Optional;
 @ShellComponent
 @AllArgsConstructor
 public class MovieCommand {
+
     private final MovieService movieService;
 
     @ShellMethod(key = "create movie", value = "Movie Creation")
     public String createMovie(String title, String genre, Integer duration) {
         try {
-            movieService.createMovie(title, genre,duration);
+            movieService.createMovie(title, genre, duration);
             return "Create movie was successful!";
         } catch (Exception e) {
             return "Create movie failed!";
         }
     }
+
     @ShellMethod(key = "list movies", value = "Get movies")
     public String listMovies() {
         List<MovieDto> movies = movieService.listMovies();
@@ -33,12 +34,13 @@ public class MovieCommand {
         } else {
             StringBuilder result = new StringBuilder();
             for (MovieDto movie : movies) {
-                result.append(String.format("%s (%s, %d minutes)",
+                result.append(String.format("%s (%s, %d minutes)%n",
                         movie.getTitle(), movie.getGenre(), movie.getDuration()));
             }
             return result.toString();
         }
     }
+
     @ShellMethod(key = "update movie", value = "Update an existing movie")
     public String updateMovie(String title, String genre, Integer duration) {
         Optional<MovieDto> updatedMovie = movieService.updateMovie(title, genre, duration);
@@ -52,6 +54,7 @@ public class MovieCommand {
         return deletedMovie.map(movie -> "Delete movie was successful: " + formatMovie(movie))
                 .orElse("Delete movie failed! Movie not found.");
     }
+
     private String formatMovie(MovieDto movie) {
         return String.format("%s (%s, %d minutes)", movie.getTitle(), movie.getGenre(), movie.getDuration());
     }

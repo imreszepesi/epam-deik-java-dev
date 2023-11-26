@@ -1,7 +1,5 @@
 package com.epam.training.ticketservice.core.room;
 
-
-
 import com.epam.training.ticketservice.core.room.model.RoomDto;
 import com.epam.training.ticketservice.core.room.persistence.Room;
 import com.epam.training.ticketservice.core.room.persistence.RoomRepository;
@@ -14,27 +12,27 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RoomServiceImpl implements  RoomService{
+public class RoomServiceImpl implements RoomService {
+
     private final RoomRepository roomRepository;
 
     @Override
     public void createRoom(String name, Integer numRows, Integer numColumns) {
-        Room room = new Room(name,numRows,numColumns);
+        Room room = new Room(name, numRows, numColumns);
         roomRepository.save(room);
     }
 
     @Override
-    public Optional<RoomDto> updateRoom(String name,Integer numRows, Integer numColumns) {
+    public Optional<RoomDto> updateRoom(String name, Integer numRows, Integer numColumns) {
         Optional<Room> optionalRoom = roomRepository.findByName(name);
-        if(optionalRoom.isPresent()){
+        if (optionalRoom.isPresent()) {
             Room room = optionalRoom.get();
             room.setNumColumns(numColumns);
             room.setNumRows(numRows);
             roomRepository.save(room);
-            RoomDto updateRoomDto = new RoomDto(room.getName(),room.getNumRows(),room.getNumColumns());
+            RoomDto updateRoomDto = new RoomDto(room.getName(), room.getNumRows(), room.getNumColumns());
             return Optional.of(updateRoomDto);
-        }
-        else{
+        } else {
             return Optional.empty();
         }
     }
@@ -46,7 +44,6 @@ public class RoomServiceImpl implements  RoomService{
         if (optionalRoom.isPresent()) {
             Room room = optionalRoom.get();
             roomRepository.delete(room);
-
             RoomDto deletedRoomDto = new RoomDto(room.getName(), room.getNumRows(), room.getNumColumns());
             return Optional.of(deletedRoomDto);
         } else {

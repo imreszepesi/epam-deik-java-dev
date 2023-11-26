@@ -19,11 +19,12 @@ public class UserCommand {
     }
 
     @ShellMethod(key = "sign in privileged", value = "Sign in privileged")
-    public String adminLogin(String username, String password){
-        return userService.adminLogin(username,password)
+    public String adminLogin(String username, String password) {
+        return userService.adminLogin(username, password)
                 .map(userDto -> userDto + " is successfully logged in!")
                 .orElse("Login failed due to incorrect credentials");
     }
+
     @ShellMethod(key = "user login", value = "User login")
     public String login(String username, String password) {
         return userService.login(username, password)
@@ -32,9 +33,9 @@ public class UserCommand {
     }
 
     @ShellMethod(key = "describe account", value = "Get user information")
-    public String description(){
+    public String description() {
         return userService.describe()
-                .map(userDto -> "Signed in with privileged account '"+ userDto.getUsername()+"'")
+                .map(userDto -> "Signed in with privileged account '" + userDto.getUsername() + "'")
                 .orElse("You are not signed in");
     }
 
@@ -48,4 +49,3 @@ public class UserCommand {
         }
     }
 }
-

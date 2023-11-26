@@ -26,7 +26,5 @@ public class InMemoryDatabaseInitializer {
         userRepository.save(admin);
         User teszt = new User("teszt", "teszt", User.Role.USER);
         userRepository.save(teszt);
-
-
     }
 }

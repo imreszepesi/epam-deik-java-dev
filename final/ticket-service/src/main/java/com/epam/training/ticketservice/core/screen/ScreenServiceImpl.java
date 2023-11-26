@@ -1,4 +1,5 @@
 package com.epam.training.ticketservice.core.screen;
+
 import com.epam.training.ticketservice.core.movie.persistence.Movie;
 import com.epam.training.ticketservice.core.movie.persistence.MovieRepository;
 import com.epam.training.ticketservice.core.screen.model.ScreenDto;
@@ -33,6 +34,7 @@ public class ScreenServiceImpl implements ScreenService {
 
         return screen.toString();
     }
+
     private Screen createScreenFromDto(ScreenDto screenDto) {
         Screen screen = new Screen();
         screen.setRoom(screenDto.getRoom());
@@ -41,17 +43,18 @@ public class ScreenServiceImpl implements ScreenService {
         screen.setScreeningEndDate(screenDto.getScreeningEndDate());
         return screen;
     }
+
     private boolean isBreakPeriod(ScreenDto screenDto) {
         return screenRepository
                 .findByScreeningEndDateGreaterThanEqualAndScreeningEndDateLessThanEqualAndRoom_Name(
-                        screenDto.getScreeningDate().minusSeconds(10*60),
+                        screenDto.getScreeningDate().minusSeconds(10 * 60),
                         screenDto.getScreeningDate(),
                         screenDto.getRoom().getName())
                 .isPresent();
     }
 
     @Override
-    public boolean checkForOverlap(ScreenDto screenDto){
+    public boolean checkForOverlap(ScreenDto screenDto) {
         return screenRepository
                 .findByScreeningDateGreaterThanEqualAndScreeningEndDateLessThanEqualAndRoom_Name(
                         screenDto.getScreeningDate(), screenDto.getScreeningEndDate(), screenDto.getRoom().getName())
@@ -80,15 +83,13 @@ public class ScreenServiceImpl implements ScreenService {
 
     @Override
     public void removeScreen(String movieName, String roomName, LocalDateTime screenDate) {
-
         Movie movie = movieRepository.findByTitle(movieName)
-                .orElseThrow(() -> new RuntimeException("Movie not found")); // Handle this exception appropriately
+                .orElseThrow(() -> new RuntimeException("Movie not found"));
 
         screenRepository.deleteByTitleAndRoom_NameAndScreeningDate(movie, roomName, screenDate);
     }
 
-
-    public ScreenDto convertToDto(Screen screen){
+    public ScreenDto convertToDto(Screen screen) {
         return ScreenDto.builder()
                 .title(screen.getTitle())
                 .room(screen.getRoom())
@@ -96,5 +97,4 @@ public class ScreenServiceImpl implements ScreenService {
                 .screeningEndDate(screen.getScreeningEndDate())
                 .build();
     }
-
 }

@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
+
     private final MovieRepository movieRepository;
+
     @Override
     public void createMovie(String title, String genre, Integer duration) {
         Movie movie = new Movie(title, genre, duration);
@@ -36,7 +38,6 @@ public class MovieServiceImpl implements MovieService {
             return Optional.empty();
         }
     }
-
 
     @Override
     public Optional<MovieDto> deleteMovie(String title) {
